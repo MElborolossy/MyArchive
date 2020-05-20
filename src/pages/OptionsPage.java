@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static main.MyArchive.connObject;
+import static main.MyArchive.mainPage;
 import static utils.CommonButtons.backToHome;
 import static utils.CommonMethods.loadSavedOptions;
 import static utils.Connections.connectionInfoData;
@@ -180,25 +181,24 @@ public class OptionsPage extends GridBagPanel {
 
     private void onClickBackupButton(){
         oBackupButton.addActionListener(arg0 -> {
-            dbSQLBackup(connectionInfoData.username,connectionInfoData.password,connectionInfoData.databaseName);
+            dbSQLBackup(connectionInfoData);
         });
     }
 
     private void onClickRestoreButton(){
         oRestoreButton.addActionListener(arg0 -> {
-            dbSQLRestore(connectionInfoData.username,connectionInfoData.password,connectionInfoData.databaseName);
+            dbSQLRestore(connectionInfoData);
         });
     }
 
     private void onClickConnectButton(){
         oConnectionButton.addActionListener(arg0 -> {
             connObject.newConnect();
+            mainPage.checkConnection();
         });
     }
     private void onClickCreateDBButton(){
-        oNewDBButton.addActionListener(arg0 -> {
-            dbCreate(connectionInfoData.databaseName);
-        });
+        oNewDBButton.addActionListener(arg0 -> dbCreate(connectionInfoData.databaseName));
     }
 }
 

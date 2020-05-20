@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
-import static utils.CommonMethods.createFileWriter;
 import static utils.CommonMethods.createInternalFile;
 
 public class Connections {
@@ -27,15 +26,10 @@ public class Connections {
     public static Connection myConn;
     private static final JsonHelper jsonHelper = new JsonHelper();
     private static File connectionFile = null ;
-    private static FileWriter connectionFW = null;
-    public static Info connectionInfoData = null;
+    public static ConnectionInfo connectionInfoData = null;
     public ConnectionPanel connectPanel = new ConnectionPanel();
     public static boolean isServer = false;
     public static boolean isConnected = false;
-
-    // Error Pane
-    JOptionPane connectionErrorPane = new JOptionPane();
-    JDialog connectionErrorDialog = connectionErrorPane.createDialog(null, "محاولة التوصيل");
 
     private static String localhostName = "";
     private static String localhostIP = "";
@@ -48,8 +42,11 @@ public class Connections {
         localhostName = host.get(1);
         generateNetworkDevices();
         connectionFile = createInternalFile("ConnectionInfo", "info.json");
-        connectionFW = createFileWriter(connectionFile);
-        connectionInfoData = jsonHelper.readConnectionInfoData(connectionFile.getAbsolutePath());
+        try {
+            connectionInfoData = jsonHelper.readConnectionInfoData(connectionFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private static List<String> getHostInfo() {
         ArrayList<String> hostInfo = new ArrayList();
@@ -78,19 +75,20 @@ public class Connections {
         connectionInfoData.databaseName = "";
         connectionInfoData.username = "";
         connectionInfoData.password = "";
-        jsonHelper.writeConnectionInfoData(connectionFW,connectionInfoData);
+        jsonHelper.writeConnectionInfoData(connectionInfoData);
     }
 
     public void newConnect(){
         connectPanel.getConnectionInfoFirstTime();
-        jsonHelper.writeConnectionInfoData(connectionFW, connectionInfoData);
+        jsonHelper.writeConnectionInfoData(connectionInfoData);
         connectLocal();
+        MYSQL.useDBIfExist(connectionInfoData);
     }
 
     public void dbConnect(){
         if (connectionInfoData.server.length() <= 0) {
             connectPanel.getConnectionInfoFirstTime();
-            jsonHelper.writeConnectionInfoData(connectionFW, connectionInfoData);
+            jsonHelper.writeConnectionInfoData(connectionInfoData);
         }
         connectLocal();
     }
@@ -109,7 +107,9 @@ public class Connections {
             isConnected = true;
         }else{ // Second case try to connect by searching the local IPs in same network
             try {
-
+                // Error Pane
+                JOptionPane connectionErrorPane = new JOptionPane();
+                JDialog connectionErrorDialog = connectionErrorPane.createDialog(null, "محاولة التوصيل");
                 Thread t = new Thread(() -> {
                     connectionErrorPane.setMessage("المدخلات غير صحيحة"+ "\n يتم محاولة البحث عن قاعدة البيانات في الشبكة المحلية" + "\n تستغرق بعض الوقت الرجاء الانتظار");
                     connectionErrorPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
@@ -128,7 +128,7 @@ public class Connections {
                     isConnected = false;
                 }else { // Success to connect locally
                     isConnected = true;
-                    jsonHelper.writeConnectionInfoData(connectionFW,connectionInfoData); // Update data in info file
+                    jsonHelper.writeConnectionInfoData(connectionInfoData); // Update data in info file
                 }
                 connectionErrorDialog.dispose();
             } catch (InterruptedException | ExecutionException e) {
@@ -185,7 +185,7 @@ public class Connections {
         private JSONParser jsonParser;
         private JSONArray jsonArray;
 
-        public Info readConnectionInfoData(String filePath){
+        public ConnectionInfo readConnectionInfoData(String filePath) throws IOException {
             jsonParser= new JSONParser();
             FileReader reader = null;
             Object obj;
@@ -195,34 +195,37 @@ public class Connections {
                 obj = jsonParser.parse(reader);
                 reader.close();
             } catch (FileNotFoundException e) {
+                reader.close();
                 System.out.println("File not found.");
                 e.printStackTrace();
-                return new Info();
+                return new ConnectionInfo();
             } catch (IOException | ParseException e) {
+                reader.close();
                 System.out.println("The file is not correctly formatted");
                 e.printStackTrace();
-                return new Info();
+                return new ConnectionInfo();
             }
-            Info  infoInput = parseInfoObject((JSONObject) obj);
-            return infoInput;
+            ConnectionInfo connectionInfoInput = parseInfoObject((JSONObject) obj);
+            return connectionInfoInput;
         }
 
-        public void writeConnectionInfoData(FileWriter fileWriter, Info info){
+        public void writeConnectionInfoData(ConnectionInfo connectionInfo){
+            FileWriter fileWriter = null;
             if(connectionFile.delete()){
                 try {
                     connectionFile.createNewFile();
-                    fileWriter =  createFileWriter(connectionFile);
+                    fileWriter =  new FileWriter(connectionFile,true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
             JSONObject connInfo = new JSONObject();
-            connInfo.put("Server",info.server);
-            connInfo.put("Port",info.port);
-            connInfo.put("Database",info.databaseName);
-            connInfo.put("Username",info.username);
-            connInfo.put("Password",info.password);
+            connInfo.put("Server", connectionInfo.server);
+            connInfo.put("Port", connectionInfo.port);
+            connInfo.put("Database", connectionInfo.databaseName);
+            connInfo.put("Username", connectionInfo.username);
+            connInfo.put("Password", connectionInfo.password);
 
             JSONObject connObject = new JSONObject();
             connObject.put("Info",connInfo);
@@ -238,7 +241,7 @@ public class Connections {
             }
         }
 
-        private Info parseInfoObject(JSONObject info) {
+        private ConnectionInfo parseInfoObject(JSONObject info) {
             //Get info object within list
             JSONObject userObject = (JSONObject) info.get("Info");
             //Get info first name
@@ -256,25 +259,25 @@ public class Connections {
             //Get info password
             String password = (String) userObject.get("Password");
 
-            return new Info(server,port,database,username,password);
+            return new ConnectionInfo(server,port,database,username,password);
         }
 
     }
-    public static class Info{
+    public static class ConnectionInfo {
         public String server;
         public String port;
         public String databaseName;
         public String username;
         public String password;
 
-        public Info(){
+        public ConnectionInfo(){
             this.server = "";
             this.port = "";
             this.databaseName = "";
             this.username = "";
             this.password = "";
         }
-        public Info(String server, String port,String databaseName,String username,String password) {
+        public ConnectionInfo(String server, String port, String databaseName, String username, String password) {
             this.server = server;
             this.port = port;
             this.databaseName = databaseName;

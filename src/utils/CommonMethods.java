@@ -5,9 +5,8 @@ import guiUtils.GridBagPanel;
 import pages.*;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -129,15 +128,6 @@ public class CommonMethods {
         return errorCounter;
     }
 
-    public static FileWriter createFileWriter(File file){
-        try {
-            return new FileWriter(file,true);
-        } catch (IOException handled) {
-            JOptionPane.showMessageDialog(null,"غير قادر على إنشاء الملف","حطأ",JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
-
     public static File createInternalFile(String folderName, String fileName){
         try {
             File jarFile = new File(codeSource.getLocation().toURI().getPath());
@@ -153,5 +143,12 @@ public class CommonMethods {
             JOptionPane.showMessageDialog(null,"غير قادر على إنشاء الملف","حطأ",JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+
+    public static void setJOptionPaneBackGroundColor(){
+        UIManager UI=new UIManager();
+        UI.put("OptionPane.background",new ColorUIResource(60,60,60));
+        UI.put("Panel.background",new ColorUIResource(60,60,60));
+        UI.put("OptionPane.messageForeground", new ColorUIResource(255,255,255));
     }
 }

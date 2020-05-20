@@ -11,16 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static utils.Connections.*;
 import static utils.Connections.myConn;
 
 public class MYSQL {
-    // ***** Check if Database is Exist Function ***** \\
-    public static int isDBExist(String dbName) {
+    // ***** Use Database if Exist Function ***** \\
+    public static int useDBIfExist(ConnectionInfo connectionInfo) {
         try {
             Statement myState = myConn.createStatement();
-            String sql = "SHOW databases LIKE '" + dbName + "'";
+            String sql = "SHOW databases LIKE '" + connectionInfo.databaseName + "'";
             ResultSet myRs = myState.executeQuery(sql);
             if (myRs.first()) {
+                sql =  "use " + connectionInfo.databaseName;
+                myState.executeUpdate(sql);
+                MYSQL.dbSQLBackup(connectionInfo);
                 myState.closeOnCompletion();
                 return 1;
             } else {
@@ -196,7 +200,7 @@ public class MYSQL {
     }
 
     // ***** Backup Database as SQL File Function ***** \\
-    public static void dbSQLBackup(String dbUser, String dbPass, String dbName) {
+    public static void dbSQLBackup(ConnectionInfo connectionInfo) {
         try {
             /*NOTE: Getting path to the Jar file being executed*/
             CodeSource codeSource = MYSQL.class.getProtectionDomain().getCodeSource();
@@ -220,8 +224,8 @@ public class MYSQL {
             FileWriter writeBackup = new FileWriter(backupBatFile);
             PrintWriter printBackup = new PrintWriter(writeBackup);
             printBackup.printf("%s" + "%n", "@echo off");
-            printBackup.printf("%s" + "%n", "\"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe\" -u" + dbUser
-                    + " -p" + dbPass + " -B " + dbName + " >" + savePath);
+            printBackup.printf("%s" + "%n", "\"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe\" -u" + connectionInfo.username
+                    + " -p" + connectionInfo.password + " -B " + connectionInfo.databaseName + " >" + savePath);
             printBackup.printf("%s" + "%n", "exit 0");
             printBackup.close();
 
@@ -243,7 +247,7 @@ public class MYSQL {
     }
 
     // Restore Database from SQL File \\
-    public static void dbSQLRestore(String dbUser, String dbPass, String dbName) {
+    public static void dbSQLRestore(ConnectionInfo connectionInfo) {
         try {
             /*NOTE: Getting path to the Jar file being executed*/
             CodeSource codeSource = MYSQL.class.getProtectionDomain().getCodeSource();
@@ -267,8 +271,8 @@ public class MYSQL {
             PrintWriter printRestore = new PrintWriter(writeRestore);
             printRestore.printf("%s" + "%n", "@echo off");
             printRestore.printf("%s" + "%n",
-                    "\"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql.exe\" -u" + dbUser + " -p" + dbPass
-                            + " -B " + dbName + " <" + savePath);
+                    "\"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql.exe\" -u" + connectionInfo.username + " -p" + connectionInfo.password
+                            + " -B " + connectionInfo.databaseName + " <" + savePath);
             printRestore.printf("%s" + "%n", "exit 0");
             printRestore.close();
 

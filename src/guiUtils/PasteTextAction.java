@@ -8,7 +8,6 @@ public class PasteTextAction extends TextAction {
 
 	public PasteTextAction() {
 		super("");
-		// TODO Auto-generated constructor stub
 	}
 
 	public void actionPerformed(ActionEvent e) {

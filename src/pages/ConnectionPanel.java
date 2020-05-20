@@ -4,6 +4,7 @@ import guiUtils.GridBagLabel;
 import guiUtils.GridBagPanel;
 import guiUtils.GridBagTextField;
 import guiUtils.GhostText;
+import utils.Connections;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,11 +54,11 @@ public class ConnectionPanel {
     public void getConnectionInfoFirstTime(){
         int result = JOptionPane.showConfirmDialog(null,connectPanel,"Welcome",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION){
-            connectionInfoData.server = serverText.getText();
-            connectionInfoData.port = portText.getText();
-            connectionInfoData.databaseName = databaseText.getText();
-            connectionInfoData.username = usernameText.getText();
-            connectionInfoData.password = passwordText.getText();
+            Connections.connectionInfoData.server = serverText.getText();
+            Connections.connectionInfoData.port = portText.getText();
+            Connections.connectionInfoData.databaseName = databaseText.getText();
+            Connections.connectionInfoData.username = usernameText.getText();
+            Connections.connectionInfoData.password = passwordText.getText();
         }else{
             setDefaultValues();
         }

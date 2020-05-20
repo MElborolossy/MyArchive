@@ -60,7 +60,7 @@ public class GridBagPanel extends JPanel {
         layer.validate();
     }
 
-    public void disableAllComponents(){
+    public void disablePage(){
         for (Component c : this.getComponents()) {
             if (c instanceof GridBagImageButton ){
                 if( ((GridBagImageButton) c).getIcon().toString().contains("Home") || ((GridBagImageButton) c).getIcon().toString().contains("Back") ){
@@ -68,6 +68,11 @@ public class GridBagPanel extends JPanel {
                 }else c.setEnabled(false);
             }
             else c.setEnabled(false);
+        }
+    }
+    public void reloadPage(){
+        for (Component c : this.getComponents()) {
+            c.setEnabled(true);
         }
     }
 

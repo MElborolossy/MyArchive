@@ -45,7 +45,6 @@ public class MainPage extends GridBagPanel {
 		this.add(mFollowButton, mFollowButton.getGBC());
 		this.add(mFollowLabel, mFollowLabel.getGBC());
 		this.add(mConnectionLabel,mConnectionLabel.getGBC());
-		checkConnection();
 		checkFollow();
 		onClickButtonsListeners();
 	}
@@ -61,30 +60,26 @@ public class MainPage extends GridBagPanel {
 	public void checkFollow() {
 		String sqlFollow = "select * from " + MAINTABLENAME + " where followstatus like '1'";
 		int countFollow = 0;
-		if (!checkConnection()){
-			mFollowLabel.setIcon(followStatusFillIcon);
-		}else {
-			try {
-				Statement myStat = myConn.createStatement();
-				ResultSet myRs = myStat.executeQuery(sqlFollow);
-				if (myRs != null) {
-					myRs.last();
-					countFollow = myRs.getRow();
-				}
-				String finalCount = Integer.toString(countFollow);
-				if (countFollow == 0) {
-					mFollowLabel.setIcon(followStatusEmptyIcon);
-					mFollowLabel.setText("");
-				} else {
-					mFollowLabel.setIcon(followStatusFillIcon);
-					mFollowLabel.setText(finalCount);
-					mFollowLabel.setForeground(Color.WHITE);
-				}
-
-			} catch (SQLException e) {
-				System.out.println("SQL Connection Error");
-				e.printStackTrace();
+		try {
+			Statement myStat = myConn.createStatement();
+			ResultSet myRs = myStat.executeQuery(sqlFollow);
+			if (myRs != null) {
+				myRs.last();
+				countFollow = myRs.getRow();
 			}
+			String finalCount = Integer.toString(countFollow);
+			if (countFollow == 0) {
+				mFollowLabel.setIcon(followStatusEmptyIcon);
+				mFollowLabel.setText("");
+			} else {
+				mFollowLabel.setIcon(followStatusFillIcon);
+				mFollowLabel.setText(finalCount);
+				mFollowLabel.setForeground(Color.WHITE);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQL Connection Error");
+			e.printStackTrace();
 		}
 	}
 
@@ -103,7 +98,6 @@ public class MainPage extends GridBagPanel {
 
 	private void onClickFollowButton() {
 		mFollowButton.addActionListener(arg0 -> {
-			// @TODO follow button algorithm
 			followPage.centerPanel(layeredPane);
 			if(checkConnection()){
 				followPage.loadFollowFaxes();
@@ -115,11 +109,19 @@ public class MainPage extends GridBagPanel {
 		mOptionsButton.addActionListener(arg0 -> optionsPage.centerPanel(layeredPane));
 	}
 
-	private boolean checkConnection(){
+	public boolean checkConnection(){
 		if (isConnected){
 			mConnectionLabel.setIcon(dbConnectedIcon);
+			addPage.reloadPage();
+			editPage.reloadPage();
+			searchPage.reloadPage();
+			followPage.reloadPage();
 		}else{
 			mConnectionLabel.setIcon(dbDisconnectedIcon);
+			addPage.disablePage();
+			editPage.disablePage();
+			searchPage.disablePage();
+			followPage.disablePage();
 		}
 		return isConnected;
 	}

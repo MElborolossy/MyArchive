@@ -116,29 +116,6 @@ public class AddPage extends GridBagPanel {
 
     }
 
-    public void onClickButtonsListeners() {
-        onClickBranchButton();
-        onClickScanButton();
-        onClickAddButton();
-        printPdfFile(aPrintButton, aTable);
-        backToHome(aBackButton);
-        chooseLink(aFileButton,aFileText);
-    }
-
-    private void onClickBranchButton() {
-        aBranchButton.addActionListener(arg0 -> {
-            // @TODO add button algorithm
-            branchPage.centerPanel(layeredPane);
-        });
-    }
-
-    public void loadComboBoxLists() {
-        loadBranches(aDirectList.getCheckBoxListModel(), INTERNALTABLE);
-        loadBranches(aToList.getCheckBoxListModel(), EXTERNALTABLE);
-        loadBranches(aFromList.getCheckBoxListModel(), EXTERNALTABLE);
-        loadBranches(aFollowList.getCheckBoxListModel(), INTERNALTABLE);
-    }
-
     @Override
     public void centerPanel(JLayeredPane layer) {
         super.centerPanel(layeredPane);
@@ -148,11 +125,40 @@ public class AddPage extends GridBagPanel {
         }
     }
 
+    @Override
+    public void reloadPage() {
+        super.reloadPage();
+        loadComboBoxLists();
+        setHScrollBarPage();
+    }
+
+    public void onClickButtonsListeners() {
+        onClickBranchButton();
+        onClickScanButton();
+        onClickAddButton();
+        printPdfFile(aPrintButton, aTable);
+        backToHome(aBackButton);
+        chooseLink(aFileButton,aFileText);
+    }
+
+    public void loadComboBoxLists() {
+        loadBranches(aDirectList.getCheckBoxListModel(), INTERNALTABLE);
+        loadBranches(aToList.getCheckBoxListModel(), EXTERNALTABLE);
+        loadBranches(aFromList.getCheckBoxListModel(), EXTERNALTABLE);
+        loadBranches(aFollowList.getCheckBoxListModel(), INTERNALTABLE);
+    }
+
     public void setHScrollBarPage() {
         setHScrollBar(aDirectList.getScrollPane());
         setHScrollBar(aToList.getScrollPane());
         setHScrollBar(aFromList.getScrollPane());
         setHScrollBar(aFollowList.getScrollPane());
+    }
+
+    private void onClickBranchButton() {
+        aBranchButton.addActionListener(arg0 -> {
+            branchPage.centerPanel(layeredPane);
+        });
     }
 
     private void onClickScanButton() {

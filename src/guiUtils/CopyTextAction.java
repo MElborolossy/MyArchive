@@ -8,7 +8,6 @@ public class CopyTextAction extends TextAction {
 
 	public CopyTextAction() {
 		super("");
-		// TODO Auto-generated constructor stub
 	}
 
 	public void actionPerformed(ActionEvent e) {

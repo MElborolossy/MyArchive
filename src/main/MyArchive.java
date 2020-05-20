@@ -8,11 +8,11 @@ import utils.NotificationSystem;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import static utils.CommonMethods.createPage;
-import static utils.Connections.*;
+import static utils.CommonMethods.setJOptionPaneBackGroundColor;
+import static utils.Connections.connectionInfoData;
+import static utils.Connections.isConnected;
 import static utils.ConstantAttributes.*;
 
 public class MyArchive {
@@ -33,35 +33,21 @@ public class MyArchive {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            setJOptionPaneBackGroundColor();
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
-        try {
-            // 1. Get Connection to DB
-            connObject.dbConnect();
-            if (isConnected) {
-                // 2. Create Statement
-                Statement myStat = myConn.createStatement();
-
-                // Check if database exist or not
-                int check = MYSQL.isDBExist(connectionInfoData.databaseName);
-                if (check == 1) {
-                    String sql = "use " + connectionInfoData.databaseName;
-                    myStat.executeUpdate(sql);
-                    MYSQL.dbSQLBackup(connectionInfoData.username, connectionInfoData.password, connectionInfoData.databaseName);
-//                if (isServer) {
-//                    MYSQL.Backupdbtosql(USERNAME, PASSWORD, DBNAME);
-//                }
-                } else {
-                    MYSQL.dbCreate(connectionInfoData.databaseName);
-                    JOptionPane.showMessageDialog(null, "الرجاء الذهاب للإعدادات وعمل استعادة لقاعدة البيانات");
-                }
+        // 1. Get Connection to DB
+        connObject.dbConnect();
+        if (isConnected) {
+            // Use database if exist or create a new one;
+            if (MYSQL.useDBIfExist(connectionInfoData) != 1) {
+                MYSQL.dbCreate(Connections.connectionInfoData.databaseName);
+                JOptionPane.showMessageDialog(null, "الرجاء الذهاب للإعدادات وعمل استعادة لقاعدة البيانات");
             }
-
-        } catch (SQLException sqlExp) {
-            sqlExp.printStackTrace();
         }
+
         EventQueue.invokeLater(() -> {
             try {
                 MyArchive window = new MyArchive();
@@ -113,11 +99,7 @@ public class MyArchive {
 
         // Open Options Page if there is any settings missed
         // Open Main Page if All things Correct
-        if(!isConnected) {
-            addPage.disableAllComponents();
-            editPage.disableAllComponents();
-            searchPage.disableAllComponents();
-            followPage.disableAllComponents();
+        if(!mainPage.checkConnection()) {
             mainPage.centerPanel(layeredPane);
 //            JOptionPane pane = new JOptionPane();
 //            pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);

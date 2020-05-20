@@ -24,9 +24,9 @@ public class BranchPage extends GridBagPanel {
 	private GridBagTable bIntTable = new GridBagTable(branchHeaders, 5, 7, 3);
 
 	// Labels
-	private GridBagLabel bExtLabel = new GridBagLabel(lEBranchIcon, 5,GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+	private GridBagLabel bExtLabel = new GridBagLabel(lEBranchIcon, 5,GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
 			1, 1);
-	private GridBagLabel bIntLabel = new GridBagLabel(lIBranchIcon, 5, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+	private GridBagLabel bIntLabel = new GridBagLabel(lIBranchIcon, 5, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
 			7, 1);
 
 	// Buttons

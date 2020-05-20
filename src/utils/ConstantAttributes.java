@@ -106,7 +106,7 @@ public class ConstantAttributes {
     public static final Font dateFontPlain = new Font("Times New Roman", Font.PLAIN, 15);
 
     // Colors Attributes
-    public static final Color backColor = new Color(255, 255, 250);
+    public static final Color backColor = new Color(60, 60, 60);
     public static final Color borderColor = new Color(170,100,0);
 
     // MySQL Connection Attribute
@@ -145,4 +145,5 @@ public class ConstantAttributes {
 
     // File Attributes
     public static CodeSource codeSource = ConstantAttributes.class.getProtectionDomain().getCodeSource();
+
 }
