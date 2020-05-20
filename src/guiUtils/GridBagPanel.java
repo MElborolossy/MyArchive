@@ -1,9 +1,11 @@
 package guiUtils;
 
-import utils.ConstantAttributes;
+import pages.MainPage;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static utils.ConstantAttributes.*;
 
 public class GridBagPanel extends JPanel {
     private StretchIcon img;
@@ -13,8 +15,8 @@ public class GridBagPanel extends JPanel {
                         double[] rowWeights) {
         this.setOpaque(false);
         this.img = img;
-        this.setBackground(ConstantAttributes.backColor);
-        this.setFont(ConstantAttributes.mainFontBold);
+        this.setBackground(backDarkColor);
+        this.setFont(mainFontBold);
         panelGBL.columnWidths = colWidth;
         panelGBL.columnWeights = colWeights;
         panelGBL.rowHeights = rowHeight;
@@ -25,9 +27,9 @@ public class GridBagPanel extends JPanel {
     public GridBagPanel(int[] colWidth, double[] colWeights, int[] rowHeight,
                         double[] rowWeights) {
         this.setOpaque(false);
-        this.img = ConstantAttributes.backgroundImage;
-        this.setBackground(ConstantAttributes.backColor);
-        this.setFont(ConstantAttributes.mainFontBold);
+        this.img = pagesDarkBackgroundImage;
+        this.setBackground(backDarkColor);
+        this.setFont(mainFontBold);
         panelGBL.columnWidths = colWidth;
         panelGBL.columnWeights = colWeights;
         panelGBL.rowHeights = rowHeight;
@@ -70,10 +72,31 @@ public class GridBagPanel extends JPanel {
             else c.setEnabled(false);
         }
     }
+
     public void reloadPage(){
         for (Component c : this.getComponents()) {
             c.setEnabled(true);
         }
+    }
+
+    public void lightMode(){
+        if(this instanceof MainPage){
+            this.img = mainLightBackgroundImage;
+        }else{
+            this.img = pagesLightBackgroundImage;
+        }
+        this.setBackground(backLightColor);
+        this.validate();
+    }
+
+    public void darkMode(){
+        if(this instanceof MainPage){
+            this.img = mainDarkBackgroundImage;
+        }else{
+            this.img = pagesDarkBackgroundImage;
+        }
+        this.setBackground(backDarkColor);
+        this.validate();
     }
 
 }

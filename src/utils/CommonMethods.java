@@ -84,7 +84,7 @@ public class CommonMethods {
                                 Double.MIN_VALUE}, new int[]{20, 30, 10, 0, 10, 30, 10, 30, 20, 0},
                         new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE});
             default:
-                return new MainPage(mainBackgroundImage, new int[]{20, 60, 150, 200, 150, 60, 0},
+                return new MainPage(mainDarkBackgroundImage, new int[]{20, 60, 150, 200, 150, 60, 0},
                         new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE},
                         new int[]{20, 0, 251, 30, 30, 30, 75, 0},
                         new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE});
@@ -145,10 +145,17 @@ public class CommonMethods {
         }
     }
 
-    public static void setJOptionPaneBackGroundColor(){
+    public static void setJOptionPaneDarkBackGroundColor(){
         UIManager UI=new UIManager();
         UI.put("OptionPane.background",new ColorUIResource(60,60,60));
         UI.put("Panel.background",new ColorUIResource(60,60,60));
         UI.put("OptionPane.messageForeground", new ColorUIResource(255,255,255));
+    }
+
+    public static void setJOptionPaneLightBackGroundColor(){
+        UIManager UI=new UIManager();
+        UI.put("OptionPane.background",new ColorUIResource(170,170,150));
+        UI.put("Panel.background",new ColorUIResource(170,170,150));
+        UI.put("OptionPane.messageForeground", new ColorUIResource(0,0,0));
     }
 }

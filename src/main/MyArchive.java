@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static utils.CommonMethods.createPage;
-import static utils.CommonMethods.setJOptionPaneBackGroundColor;
+import static utils.CommonMethods.setJOptionPaneDarkBackGroundColor;
 import static utils.Connections.connectionInfoData;
 import static utils.Connections.isConnected;
 import static utils.ConstantAttributes.*;
@@ -33,7 +33,7 @@ public class MyArchive {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            setJOptionPaneBackGroundColor();
+            setJOptionPaneDarkBackGroundColor();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -82,9 +82,9 @@ public class MyArchive {
         archiveFrame.getContentPane().setLayout(new BorderLayout(0, 0));
 
         // Initialize LayeredPane
-        layeredPane = new ImageLayeredPane(backgroundImage);
+        layeredPane = new ImageLayeredPane(pagesDarkBackgroundImage);
         layeredPane.setOpaque(true);
-        layeredPane.setBackground(backColor);
+        layeredPane.setBackground(backDarkColor);
         archiveFrame.getContentPane().add(layeredPane);
         layeredPane.setLayout(new BorderLayout(0, 0));
 

@@ -12,7 +12,7 @@ import java.awt.*;
 import static utils.Connections.*;
 public class ConnectionPanel {
 
-    private GridBagPanel connectPanel = new GridBagPanel(new int[]{0, 0, 0, 0, 0},new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE},
+    public GridBagPanel connectPanel = new GridBagPanel(new int[]{0, 0, 0, 0, 0},new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE},
             new int[]{0, 0, 0, 0, 0, 0, 0},new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE});
 
     public static GridBagLabel welcomeLabel = new GridBagLabel("First Time Connection Setup", SwingConstants.CENTER, GridBagConstraints.BOTH,1,1);

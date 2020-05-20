@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 
 public class ConstantAttributes {
     // Program Images
-    public static final StretchIcon mainBackgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/Main.png"));
-    public static final StretchIcon backgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/Pages.png"));
+    public static final StretchIcon mainDarkBackgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/MainDark.png"));
+    public static final StretchIcon pagesDarkBackgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/PagesDark.png"));
+    public static final StretchIcon mainLightBackgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/MainLight.png"));
+    public static final StretchIcon pagesLightBackgroundImage = new StretchIcon(ConstantAttributes.class.getResource("/images/PagesLight.png"));
     public static final ImageIcon addIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/Add.png"));
     public static final ImageIcon addFaxIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/AddFax.png"));
     public static final ImageIcon addLinkIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/AddLink.png"));
@@ -71,6 +73,8 @@ public class ConstantAttributes {
     public static final ImageIcon dbDisconnectedIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/dbDisconnect.png"));
     public static final ImageIcon connectionSettingsIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/ConnectionSettings.png"));
     public static final ImageIcon newDBIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/NewDB.png"));
+    public static final ImageIcon darkModeIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/Night.png"));
+    public static final ImageIcon lightModeIcon = new ImageIcon(ConstantAttributes.class.getResource("/images/Light.png"));
 
     public static final TrayIcon trayIcon = new TrayIcon(new ImageIcon(ConstantAttributes.class.getResource("/images/icon.png")).getImage());
 
@@ -106,7 +110,8 @@ public class ConstantAttributes {
     public static final Font dateFontPlain = new Font("Times New Roman", Font.PLAIN, 15);
 
     // Colors Attributes
-    public static final Color backColor = new Color(60, 60, 60);
+    public static final Color backDarkColor = new Color(60, 60, 60);
+    public static final Color backLightColor = new Color(170, 170, 150);
     public static final Color borderColor = new Color(170,100,0);
 
     // MySQL Connection Attribute

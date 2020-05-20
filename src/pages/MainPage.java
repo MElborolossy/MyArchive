@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static main.MyArchive.*;
+import static utils.CommonMethods.setJOptionPaneDarkBackGroundColor;
+import static utils.CommonMethods.setJOptionPaneLightBackGroundColor;
 import static utils.Connections.isConnected;
 import static utils.Connections.myConn;
 import static utils.ConstantAttributes.*;
@@ -24,6 +26,7 @@ public class MainPage extends GridBagPanel {
 	GridBagImageButton mSearchButton = new GridBagImageButton(searchIcon, 2, 3);
 	GridBagImageButton mEditButton = new GridBagImageButton(editIcon, 4, 5);
 	GridBagImageButton mFollowButton = new GridBagImageButton(followIcon, 2, 5);
+	GridBagImageButton mNLModeButton = new GridBagImageButton(darkModeIcon,4,1);
 
 	// Labels
 	private GridBagLabel mFollowLabel = new GridBagLabel(followStatusEmptyIcon,(long)GridBagConstraints.CENTER , GridBagConstraints.VERTICAL, 2, 1);
@@ -45,6 +48,7 @@ public class MainPage extends GridBagPanel {
 		this.add(mFollowButton, mFollowButton.getGBC());
 		this.add(mFollowLabel, mFollowLabel.getGBC());
 		this.add(mConnectionLabel,mConnectionLabel.getGBC());
+		this.add(mNLModeButton,mNLModeButton.getGBC());
 		checkFollow();
 		onClickButtonsListeners();
 	}
@@ -55,6 +59,7 @@ public class MainPage extends GridBagPanel {
 		onClickSearchButton();
 		onClickFollowButton();
 		onClickOptionsButton();
+		onClickNLModeButton();
 	}
 	// *** Check follow Status Function *** \\
 	public void checkFollow() {
@@ -107,6 +112,38 @@ public class MainPage extends GridBagPanel {
 
 	private void onClickOptionsButton() {
 		mOptionsButton.addActionListener(arg0 -> optionsPage.centerPanel(layeredPane));
+	}
+
+	private void onClickNLModeButton(){
+		mNLModeButton.addActionListener(arg0 ->{
+			if (mNLModeButton.getIcon().toString().contains("Night")) {
+				mNLModeButton.setIcon(lightModeIcon);
+				mainPage.lightMode();
+				addPage.lightMode();
+				editPage.lightMode();
+				searchPage.lightMode();
+				followPage.lightMode();
+				branchPage.lightMode();
+				optionsPage.lightMode();
+				layeredPane.setBackground(backLightColor);
+				layeredPane.validate();
+				connObject.connectPanel.connectPanel.lightMode();
+				setJOptionPaneLightBackGroundColor();
+			}else {
+				mNLModeButton.setIcon(darkModeIcon);
+				mainPage.darkMode();
+				addPage.darkMode();
+				editPage.darkMode();
+				searchPage.darkMode();
+				followPage.darkMode();
+				branchPage.darkMode();
+				optionsPage.darkMode();
+				connObject.connectPanel.connectPanel.darkMode();
+				layeredPane.setBackground(backDarkColor);
+				layeredPane.validate();
+				setJOptionPaneDarkBackGroundColor();
+			}
+		});
 	}
 
 	public boolean checkConnection(){
